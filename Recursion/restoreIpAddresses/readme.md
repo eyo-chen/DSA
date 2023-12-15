@@ -106,5 +106,18 @@ for (int i = 1; i <= 3 && index + i <= s.length(); i++) {
 n = the legnth of input string
 
 ## Time Complexity: O(1)
+- Branching Factor = 3
+   - Because each segment can be between 0 and 255
+   - So we can only decompose one, two, or three substrings
+- Depth = 3
+    - Because we can only decompose three times to get four segments
+- Each call stack = O(1)
+    - Because we only do constant work
+- Time Complexity = O(3^3) = O(1)
+  - It doesn't mean it's fast
+  - It means the time complexity is not related to the input size
+  - No matter how long the input string is, we only do three decompositions to get four segments
 
 ## Space Complexity: O(1)
+- Each call stack = O(1)
+- We at most goes down three levels
