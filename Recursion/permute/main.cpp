@@ -7,30 +7,30 @@ class Solution {
  public:
   vector<vector<int>> permute(vector<int>& nums) {
     vector<vector<int>> ans;
-    vector<int> tmp;
+    vector<int> temp;
     vector<bool> used(nums.size(), false);
 
-    helper(nums, ans, tmp, used);
+    helper(nums, ans, temp, used);
 
     return ans;
   }
 
-  void helper(vector<int>& nums, vector<vector<int>>& ans, vector<int>& tmp,
+  void helper(vector<int>& nums, vector<vector<int>>& ans, vector<int>& temp,
               vector<bool>& used) {
-    if (nums.size() == tmp.size()) {
-      ans.push_back(tmp);
+    if (nums.size() == temp.size()) {
+      ans.push_back(temp);
       return;
     }
 
     for (int i = 0; i < nums.size(); i++) {
       if (used[i]) continue;
 
-      tmp.push_back(nums[i]);
+      temp.push_back(nums[i]);
       used[i] = true;
 
-      helper(nums, ans, tmp, used);
+      helper(nums, ans, temp, used);
 
-      tmp.pop_back();
+      temp.pop_back();
       used[i] = false;
     }
   }

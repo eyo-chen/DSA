@@ -104,6 +104,7 @@ n = the legnth of input string
 - For second level, we have n - 1 choices
 - For third level, we have n - 2 choices
 - So the branching factor is n * (n - 1) * (n - 2) * ... * 1 = n!
+- `ans.push_back(tmp)` takes O(n) time because we have to copy the whole vector to the answer vector
 
 ## Space Complexity: O(n)
 - The deepest height of recursive tree is n

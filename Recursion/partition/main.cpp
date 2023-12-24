@@ -8,17 +8,17 @@ class Solution {
  public:
   vector<vector<string>> partition(string s) {
     vector<vector<string>> ans;
-    vector<string> tmp;
+    vector<string> temp;
 
-    helper(ans, tmp, s, 0);
+    helper(ans, temp, s, 0);
 
     return ans;
   }
 
-  void helper(vector<vector<string>> &ans, vector<string> &tmp, string s,
+  void helper(vector<vector<string>> &ans, vector<string> &temp, string s,
               int index) {
     if (index == s.length()) {
-      ans.push_back(tmp);
+      ans.push_back(temp);
       return;
     }
 
@@ -27,9 +27,9 @@ class Solution {
 
       if (!isPalindrome(subs)) continue;
 
-      tmp.push_back(subs);
-      helper(ans, tmp, s, i + 1);
-      tmp.pop_back();
+      temp.push_back(subs);
+      helper(ans, temp, s, i + 1);
+      temp.pop_back();
     }
   }
 
