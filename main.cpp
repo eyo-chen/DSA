@@ -6,9 +6,14 @@
 using namespace std;
 
 int main() {
-  vector<int> a = {1, 2, 3};
+  string sta;
 
-  cout << a[-1] << endl;
+  sta += "(";
+  cout << sta << endl;
 
-  return 0;
+  sta += ")";
+  cout << sta << endl;
+
+  sta.pop_back();
+  cout << sta << endl;
 }
