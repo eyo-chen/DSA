@@ -1,65 +1,53 @@
-// 'use strict';
-function TreeNode(val, left, right, next) {
-  this.val = val === undefined ? null : val;
-  this.left = left === undefined ? null : left;
-  this.right = right === undefined ? null : right;
-}
-var isSubtree = function (root, subRoot) {
-  if (root === null || root.left === null || root.right === null) {
-    return false;
-  }
+/**
+ * @param {number} n
+ * @return {string[][]}
+ */
+var solveNQueens = function(n) {
+  var ans = [];
+  var temp = Array.from({ length: n }, () => '.'.repeat(n));
 
-  if (recursiveHelper(root, subRoot)) {
-    return true;
-  }
+  helper(ans, temp, 0, n);
 
-  return isSubtree(root.right, subRoot) || isSubtree(root.left, subRoot);
+  return ans;
 };
 
-function recursiveHelper(root, subRoot) {
-  if (root === null && subRoot === null) {
-    return true;
+/**
+* @param {string[][]} ans
+* @param {string[]} temp
+* @param {number} row
+* @param {number} n
+*/
+var helper = function(ans, temp, row, n) {
+  if (row === n) {
+      ans.push([...temp]);
+      return;
   }
 
-  if (root === null || subRoot === null) {
-    return false;
-  }
+  for (var c = 0; c < n; c++) {
+      var isValid = true;
 
-  if (root.val !== subRoot.val) {
-    return false;
-  }
+      for (var r = row - 1; r >= 0; r--) {
+          var prevRow = temp[r];
+          var diff = row - r;
 
-  return (
-    recursiveHelper(root.right, subRoot.right) &&
-    recursiveHelper(root.left, subRoot.left)
-  );
-}
-
-function createCompleteBinaryTreeFromArray(arr) {
-  // [1,null,2,3]
-  let root = null;
-  let q = [];
-  let i = 0;
-  let t = arr[i] == null ? null : new TreeNode(arr[i]);
-  root = t;
-  q.push(root);
-  i++;
-  while (q.length && i < arr.length) {
-    let t1 = q.shift();
-    if (t1 != null) {
-      t1.left = arr[i] == null ? null : new TreeNode(arr[i]);
-      q.push(t1.left);
-      i++;
-      if (i >= arr.length) {
-        break;
+          if (
+              (c - diff >= 0 && prevRow[c - diff] === 'Q') ||
+              (prevRow[c] === 'Q') ||
+              (c + diff < n && prevRow[c + diff] === 'Q')
+          ) {
+              isValid = false;
+              break;
+          }
       }
-      t1.right = arr[i] == null ? null : new TreeNode(arr[i]);
-      q.push(t1.right);
-      i++;
-    }
+
+      if (!isValid) continue;
+
+      temp[row] = temp[row].substring(0, c) + 'Q' + temp[row].substring(c + 1);
+      helper(ans, temp, row + 1, n);
+      temp[row] = temp[row].substring(0, c) + '.' + temp[row].substring(c + 1);
   }
-  return root;
-}
-const a = createCompleteBinaryTreeFromArray([1]);
-const b = createCompleteBinaryTreeFromArray([1]);
-console.log(isSubtree(a, b));
+};
+
+// Example usage:
+var result = solveNQueens(4);
+console.log(result);
