@@ -18,6 +18,7 @@ class Node {
       : val(_val), left(_left), right(_right), next(_next) {}
 };
 
+// Using BFS
 class Solution {
  public:
   Node* connect(Node* root) {
@@ -46,15 +47,18 @@ class Solution {
   }
 };
 
+// Using DFS
 class Solution {
  public:
   Node* connect(Node* root) {
     if (root == nullptr) return nullptr;
 
+    // wire-up the left child
     if (root->left != nullptr) {
       root->left->next = root->right;
     }
 
+    // wire-up the right child
     if (root->right != nullptr && root->next != nullptr) {
       root->right->next = root->next->left;
     }
@@ -76,15 +80,19 @@ class Solution {
       Node* curNode = leftMostNode;
 
       while (curNode != nullptr) {
+        // wire-up the left child
         curNode->left->next = curNode->right;
 
+        // wire-up the right child
         if (curNode->next != nullptr) {
           curNode->right->next = curNode->next->left;
         }
 
+        // move to the next node in the same level
         curNode = curNode->next;
       }
 
+      // move to the next level
       leftMostNode = leftMostNode->left;
     }
 
