@@ -148,6 +148,9 @@ root->right = connect(root->right);
 ```
 It simply means "go to connect the left child tree and the right child tree".
 
+One thing to note that we wire-up the left subtree first.<br>
+And it's still valid because the tree is perfect balanced tree.<br>
+
 Suppose the tree is following
 ```
     1
