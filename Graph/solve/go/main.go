@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/OYE0303/DSA/goutils/queue"
+	"github.com/OYE0303/DSA/goutils/stack"
+)
 
 func Solve(board [][]byte) {
 	safeRegion := map[string]bool{}
@@ -74,4 +79,69 @@ func helper(board [][]byte, r int, c int, safeRegion map[string]bool) {
 	helper(board, r-1, c, safeRegion)
 	helper(board, r, c+1, safeRegion)
 	helper(board, r, c-1, safeRegion)
+}
+
+type pair struct {
+	r int
+	c int
+}
+
+func helperStack(board [][]byte, r int, c int, safeRegion map[string]bool) {
+	s := stack.Constructor[pair]()
+	s.Push(pair{r, c})
+
+	for !s.Empty() {
+		p := s.Peak()
+		s.Pop()
+
+		if p.r < 0 || p.c < 0 || p.r >= len(board) || p.c >= len(board[0]) {
+			continue
+		}
+
+		key := fmt.Sprintf("%d-%d", p.r, p.c)
+		if _, ok := safeRegion[key]; ok {
+			continue
+		}
+
+		if board[p.r][p.c] == 'X' {
+			continue
+		}
+
+		safeRegion[key] = true
+
+		s.Push(pair{p.r + 1, p.c})
+		s.Push(pair{p.r - 1, p.c})
+		s.Push(pair{p.r, p.c + 1})
+		s.Push(pair{p.r, p.c - 1})
+	}
+}
+
+func helperQueue(board [][]byte, r int, c int, safeRegion map[string]bool) {
+	q := queue.Constructor[pair]()
+	q.Push(pair{r, c})
+
+	for !q.Empty() {
+		p := q.Front()
+		q.Pop()
+
+		if p.r < 0 || p.c < 0 || p.r >= len(board) || p.c >= len(board[0]) {
+			continue
+		}
+
+		key := fmt.Sprintf("%d-%d", p.r, p.c)
+		if _, ok := safeRegion[key]; ok {
+			continue
+		}
+
+		if board[p.r][p.c] == 'X' {
+			continue
+		}
+
+		safeRegion[key] = true
+
+		q.Push(pair{p.r + 1, p.c})
+		q.Push(pair{p.r - 1, p.c})
+		q.Push(pair{p.r, p.c + 1})
+		q.Push(pair{p.r, p.c - 1})
+	}
 }
