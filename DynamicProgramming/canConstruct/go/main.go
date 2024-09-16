@@ -9,6 +9,8 @@ func CanConstruct(ransomNote string, magazine string) bool {
 
 	for _, s := range ransomNote {
 		key := string(s)
+		// return false if the character is not in the hash table
+		// or the character is 0, which means there's no enough characters in the magazine
 		if v, ok := hashTable[key]; !ok || v == 0 {
 			return false
 		}
