@@ -282,3 +282,31 @@ We are done<br>
 #### Time Complexity: O(n)
 #### Space Complexity: O(1)
 
+## Third Solution
+The idea of this solution is not that hard.<br>
+We just use an array to store all the nodes in order<br>
+Then we use two pointers technique to re-wire the nodes<br>
+
+However, there's a lot of edge cases to consider<br>
+1. Have to break the link of each node when adding to the array
+   - Each element in the array should be a node without any dependency(next pointer)
+   - It's easier to re-wire the nodes in the next step
+2. How to handle the re-wiring?
+   - Odd Case
+     - [1,2,3,4,5], correct answer is [1,5,2,4,3]
+     - when left = 2, right = 4
+      - make 2 -> 4
+      - left++
+      - left != right
+      - make 4 -> 3
+      - right--
+    - When consider the condition again, left = 3, right = 3, break the loop
+   - Even Case
+     - [1,2,3,4]
+     - when left = 2, right = 3
+      - make 2 -> 3
+      - left++
+      - left == right, break the loop
+   - So, after incrementing the left pointer, we have to check if it equals to the right pointer
+     - If yes, break the loop
+     - If no, make the right pointer's next point to the left pointer
