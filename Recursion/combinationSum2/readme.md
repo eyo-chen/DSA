@@ -58,6 +58,12 @@ If we're at the call stack where the starting index is 2a<br/>
 `for i = 1; i < candidates.length; i++`<br/>
 It's okay to choose 2a to explore the next call stack<br/>
 But it's not okay to choose 2b and 2c<br/>
+Consider this example, candidates = [1a,1b,2,5,6,7], target = 8<br>
+At first, we're allowed to choose 1a and start our exploration<br/>
+But we can't choose 1b at here<br/>
+That's because we first choose 1a, and we'll get [1a, 2, 5] as a valid combination<br/>
+If we choose 1b, we'll get [1b, 2, 5] as another valid combination<br/>
+We don't want duplicate combinations in our result<br/>
 
 Note that we pass `i + 1` to the next call stack<br/>
 Why is different from the previous solution?<br/>
@@ -69,7 +75,7 @@ And we know one of the requirement is **Each element can only be used once**<br/
 So after we choose an element, we can't choose it again(pass `i + 1` to the next call stack)<br/> 
 
 ### Recursive Tree Visualization
-candidates = [1,2,2,2], target = 5
+candidates = [1,2a,2b,2c], target = 5
 <pre>
                                                                                    5
                             1                            2a                                 2b                      2c           
@@ -82,10 +88,10 @@ Once choosing, the output is [1,2a,2c]<br/>
 It's as same as first output [1,2a,2b]<br/>
 
 `i > index && candidates[i] == candidates[i - 1]` helps us to avoid this case<br/>
-Note that in the call stack of ** part, the iteration is from 2 ~ 4<br/>
+Note that in the call stack of ** part, the iteration is from 3 ~ 4<br/>
 Why?<br/>
 Because after choosing 2a, we pass i + 1 down as our initial index for next call stack<br/>
-So we start from 2<br/>
+So we start from 2b<br/>
 - For 2b, 2 > 2 is false, what does this mean?
   - It means it's the very first element in this call stack, it's okay to choose it no matter what 
 - For 2c, 3 > 2 && candidate[2] == candidate[1], what does this means?
