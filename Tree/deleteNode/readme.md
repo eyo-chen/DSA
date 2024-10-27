@@ -272,6 +272,35 @@ After
                                 8     11                  18
 ```
 
+10/27/2024 updated:<br>
+Let's use the recursion idea to think about the problem.<br>
+When using recursion, we always think about one idea, and three things.<br>
+One idea is that "What problem we're solving for each call stack?".<br>
+Three things are <br>
+(1) What is the information we need to keep track of for each call stack?<br>
+(2) What is the base case for the recursion?<br>
+(3) What is the recursive case for the recursion?<br>
+
+First idea:<br>
+For each call stack, we're dealing with two cases.<br>
+(1) Finding the node to delete.<br>
+=> Is the current node the node to delete?<br>
+=> If not, go to the left or right subtree to find the node to delete.<br>
+(2) Deleting the node.<br>
+=> If the node to delete is a leaf node, return nullptr to the parent node, which represents that the node is deleted.<br>
+=> If the node to delete has only one child, return the non-nullptr child node to the parent node, which represents that the node is deleted.<br>
+=> If the node to delete has two children, find the minimum value node in the right subtree, change the value of the node to delete to the value of the minimum value node, and delete the minimum value node.
+
+Three things:<br>
+(1) What is the information we need to keep track of for each call stack?<br>
+=> The root node of the subtree that we're currently dealing with, and the value of the node to delete.
+(2) What is the base case for the recursion?<br>
+=> When the current node is nullptr, we return nullptr to the parent node.
+(3) What is the recursive case for the recursion?<br>
+=> When the current node is not nullptr, we compare the value of the current node with the value of the node to delete.<br>
+=> If the current node is the node to delete, we deal with the three cases mentioned above.<br>
+=> If the current node is not the node to delete, we go to the left or right subtree to find the node to delete.
+
 # Complexity Analysis
 ## Time Complexity O(h)
 - In the worst case, when the tree is highly unbalanced, the time complexity of the deleteNode function can be O(n), where n is the number of nodes in the tree.
