@@ -70,6 +70,7 @@ class Solution {
   }
 };
 
+// Iteration
 class Solution {
  public:
   Node* connect(Node* root) {
