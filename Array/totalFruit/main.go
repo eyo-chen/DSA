@@ -74,3 +74,47 @@ func TotalFruit2(fruits []int) int {
 
 	return ans
 }
+
+// Brute Force 2
+// This is the solution I came up with at 1201 (second time)
+// This is an optimized version of the brute force approach
+// It only used O(1) space
+func TotalFruit3(fruits []int) int {
+	if len(fruits) == 1 {
+		return 1
+	}
+
+	ans := 0
+	// Loop through each fruit type
+	for i := 0; i < len(fruits)-1; i++ {
+		// t1 and t2 are the two types of fruits we can collect
+		// t1 is initialized to the first fruit type
+		// t2 is initialized to -1, indicating that we haven't found the second fruit type yet
+		t1, t2 := fruits[i], -1
+		count := 1
+
+		// For each fruit type, we find the longest subarray that contains only t1 and t2
+		for k := i + 1; k < len(fruits); k++ {
+			// If the current fruit is the same as t1 or t2, we can collect it
+			if fruits[k] == t1 || fruits[k] == t2 {
+				count++
+				continue
+			}
+
+			// If we haven't found the second fruit type yet, we set t2 to the current fruit type
+			if t2 == -1 {
+				t2 = fruits[k]
+				count++
+				continue
+			}
+
+			// If the current fruit is neither t1 nor t2, we break the loop
+			// because we can't collect it
+			break
+		}
+
+		// Update the answer with the maximum count
+		ans = max(ans, count)
+	}
+	return ans
+}

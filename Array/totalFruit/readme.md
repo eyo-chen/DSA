@@ -15,6 +15,16 @@ So the longest subarray with at most 2 distinct integers is [2,3,2,2] with the l
 
 For each iteration to find the longest subarray, we need a hash table to store the distinct integers.<br>
 
+Updated at 1201:<br>
+We can use two variables to store the two types of fruits instead of a hash table.<br>
+The idea is that we can use two variables to represent the two types of fruits.<br>
+At the beginning, we set t1 to the first fruit type and t2 to -1.<br>
+Setting t2 to -1 is important, because it indicates that we haven't found the second fruit type yet.<br>
+Later, when the current fruit is not t1 or t2 AND t2 is -1, we set t2 to the current fruit type.<br>
+If the current fruit is t1 or t2, we increment the count.<br>
+If the current fruit is neither t1 nor t2 and t2 is not -1, we break the loop, which means we can't collect the current fruit.<br>
+This approach has a space complexity of O(1) because we only used two variables.
+
 ### Complexity Analysis
 #### Time Complexity O(n^2)
 - For each iteration, we need to iterate through the rest of the array to find the longest subarray, so the time complexity is O(n^2).
