@@ -47,3 +47,46 @@ func AddStrings(num1 string, num2 string) string {
 
 	return string(ans)
 }
+
+// It's the solution I came up with at 1201 (second time)
+// This is not as good as the first solution
+// The first solution is more concise and easier to understand
+// Couple things to note:
+// 1. `%` gives us the last digit of the number
+// 2. `/` gives us the carry
+// 3. In the end, we have to remember to add the carry to the answer if there is one
+func AddStrings2(num1 string, num2 string) string {
+	ans := []byte{}
+	index := 0
+	carry := 0
+
+	for index < len(num1) || index < len(num2) {
+		sum := carry
+		if index < len(num1) {
+			sum += int(num1[len(num1)-1-index] - '0')
+		}
+		if index < len(num2) {
+			sum += int(num2[len(num2)-1-index] - '0')
+		}
+
+		if sum >= 10 {
+			sum -= 10
+			carry = 1
+		} else {
+			carry = 0
+		}
+
+		ans = append(ans, byte(sum)+'0')
+		index++
+	}
+
+	if carry > 0 {
+		ans = append(ans, byte(carry)+'0')
+	}
+
+	for left, right := 0, len(ans)-1; left < right; left, right = left+1, right-1 {
+		ans[left], ans[right] = ans[right], ans[left]
+	}
+
+	return string(ans)
+}
