@@ -27,6 +27,12 @@ To find the left-most side and right-most side, we keep moving left and right po
 
 ### Complexity Analysis
 #### Time Complexity O(n)
+- The main loop iterates through the array once: O(n)
+- For each peak, we expand left and right to find the mountain boundaries
+- Although we have nested loops (the left and right expansion), each element is visited at most once in these expansions
+- ***This is because once we process a mountain, we move to the next potential peak, and we never process the same elements again in the expansions***
+- Therefore, despite the nested appearance, the total number of operations is still linear
+
 #### Space Complexity O(1)
 
 ## One Pass (Two Pointers)
@@ -45,4 +51,25 @@ Note that both (Finding Peak) and (Two Pointers) have same time and space comple
 
 ### Complexity Analysis
 #### Time Complexity O(n)
+#### Space Complexity O(1)
+
+## Try For Each Element(Updated 12/14/2024)
+This is the solution I came up with when doing this problem second time(12/14/2024).<br>
+The idea is for each element, we try to find the longest mountain that contains this element.<br>
+The idea to find the longest mountain is using two while loop.<br>
+- First while loop
+  - Move the pointer to the right until the value is not increasing
+  - In other words, keep moving the right if the value is increasing
+- Second while loop
+  - Move the pointer to the right until the value is not decreasing
+  - In other words, keep moving the right if the value is decreasing
+- After moving, the pointer is the end of the mountain, we can calculate the length of mountain and update the longest length
+
+In addition, we need to use two boolean variable to check if the mountain has increasing and decreasing, because we need to make sure the mountain is valid.<br>
+There are two adge cases:<br>
+- The input array is all increasing or all decreasing, then the longest mountain is 0<br>
+- The input array is empty, then the longest mountain is 0<br>
+
+### Complexity Analysis
+#### Time Complexity O(n^2)
 #### Space Complexity O(1)

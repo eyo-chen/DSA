@@ -114,3 +114,36 @@ func LongestMountain3(arr []int) int {
 
 	return ans
 }
+
+func LongestMountain4(arr []int) int {
+	ans := 0
+
+	for i := 0; i < len(arr); i++ {
+		end := i
+		hasDecrease := false
+		hasIncrease := false
+
+		// Find the left-most side of the mountain
+		// Keep moving the end pointer to the right until the value is not increasing
+		for end < len(arr)-1 && arr[end] < arr[end+1] {
+			end++
+			hasIncrease = true
+		}
+
+		// Find the right-most side of the mountain
+		// Keep moving the end pointer to the right until the value is not decreasing
+		for end < len(arr)-1 && arr[end] > arr[end+1] {
+			end++
+			hasDecrease = true
+		}
+
+		// If the mountain has both increasing and decreasing
+		// And the length of the mountain is greater than 3
+		// We can update the longest length
+		if hasIncrease && hasDecrease && end-i+1 >= 3 {
+			ans = max(ans, end-i+1)
+		}
+	}
+
+	return ans
+}
