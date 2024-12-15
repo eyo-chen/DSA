@@ -117,3 +117,43 @@ func Merge3(nums1 []int, m int, nums2 []int, n int) {
 		nums1[m+i] = n
 	}
 }
+
+// Updated 12/15/2024
+// This is the swapping solution from the beginning of the array when I try to solve this problem second time.
+// The logic is just like the Merge3, but it solves the problem.
+// After swapping, we make sure the nums2 is sorted.
+// For example, nums1 = [1,8,9,0,0,0], m = 3, nums2 = [2,4,6], n = 3
+// We first compare 1 with 2, 1 is less than 2, so we don't need to swap.
+// Then we compare 8 with 2, 8 is greater than 2, so we swap 8 and 2.
+// After swapping, nums1 becomes [1,2,9,0,0,0], nums2 becomes [8,4,6].
+// In this case, nums2 is not sorted, so we need to sort it.
+// nums2 = [8,4,6] -> [4,6,8]
+// Then we continue the same logic
+// The most important thing is that we need to make sure the nums2 is sorted after swapping.
+func Merge4(nums1 []int, m int, nums2 []int, n int) {
+	if len(nums2) == 0 {
+		return
+	}
+
+	for i := 0; i < m; i++ {
+		// When nums1 element is less than nums2 element, we don't need to swap.
+		if nums1[i] <= nums2[0] {
+			continue
+		}
+
+		// Swap the nums1 element with the nums2 element.
+		nums1[i], nums2[0] = nums2[0], nums1[i]
+
+		// Sort the nums2 array.
+		for k := 0; k < len(nums2)-1; k++ {
+			if nums2[k] > nums2[k+1] {
+				nums2[k], nums2[k+1] = nums2[k+1], nums2[k]
+			}
+		}
+	}
+
+	// Copy the remaining elements in nums2 to the end of nums1.
+	for i := 0; i < n; i++ {
+		nums1[i+m] = nums2[i]
+	}
+}
