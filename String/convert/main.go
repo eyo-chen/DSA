@@ -81,10 +81,58 @@ func genAns(table []string) string {
 	return ans
 }
 
+// This is the solution I came up with at 12/22/2024
+func Convert2(s string, numRows int) string {
+	if numRows == 1 {
+		return s
+	}
+
+	table := make([][]byte, numRows)
+	ans := make([]byte, 0, len(s))
+	direction := false // false = down, true = up
+	row := 0
+
+	for i := 0; i < len(s); i++ {
+		char := s[i]
+		table[row] = append(table[row], char)
+
+		// When it's the first row, we need to go down
+		if row == 0 {
+			direction = false
+			row++
+			continue
+		}
+
+		// When it's the last row, we need to go up
+		if row == numRows-1 {
+			direction = true
+			row--
+			continue
+		}
+
+		// If direction is true, we go up one row
+		// If direction is false, we go down one row
+		if direction {
+			row--
+		} else {
+			row++
+		}
+	}
+
+	// Concatenate each string in the table to get the result
+	for r := 0; r < len(table); r++ {
+		for c := 0; c < len(table[r]); c++ {
+			ans = append(ans, table[r][c])
+		}
+	}
+
+	return string(ans)
+}
+
 // This is the deprecated approach
 // It uses a 2D array to store the result to simulate the zigzag pattern
 // This approach is not recommended because it's not efficient and it's hard to implement
-func Convert2(s string, numRows int) string {
+func Convert3(s string, numRows int) string {
 	if numRows == 1 {
 		return s
 	}
