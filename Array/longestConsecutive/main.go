@@ -64,6 +64,35 @@ func LongestConsecutive2(nums []int) int {
 	return maxLength
 }
 
+// Update at 2024-12-26
+// It's the same as LongestConsecutive2, but it's more readable and easier to understand.
+// We remove the if-statement in the for loop.
+// Because if there's no num + i in the hash table, the for loop will not enter.
+func LongestConsecutive2_1(nums []int) int {
+	ans := 0
+	hashTable := make(map[int]bool, len(nums))
+
+	// Create hash table
+	for _, n := range nums {
+		hashTable[n] = true
+	}
+
+	// Find the longest consecutive sequence
+	for i := 0; i < len(nums); i++ {
+		curLen := 1
+		curVal := nums[i] + 1
+
+		for hashTable[curVal] {
+			curLen++
+			curVal++
+		}
+
+		ans = max(ans, curLen)
+	}
+
+	return ans
+}
+
 // LongestConsecutive3 finds the length of the longest consecutive sequence in an unsorted array
 // by only starting the count from the smallest number in each sequence
 // Time Complexity O(n)
