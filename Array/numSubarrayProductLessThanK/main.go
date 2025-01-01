@@ -26,7 +26,26 @@ func NumSubarrayProductLessThanK(nums []int, k int) int {
 	return ans
 }
 
+// More concise version
 func NumSubarrayProductLessThanK2(nums []int, k int) int {
+	ans := 0
+
+	for i := 0; i < len(nums); i++ {
+		product := 1
+		for j := i; j < len(nums); j++ {
+			product *= nums[j]
+			if product < k {
+				ans++
+			} else {
+				break
+			}
+		}
+	}
+
+	return ans
+}
+
+func NumSubarrayProductLessThanK3(nums []int, k int) int {
 	if k <= 1 {
 		return 0
 	}
@@ -52,6 +71,7 @@ func NumSubarrayProductLessThanK2(nums []int, k int) int {
 	return ans
 }
 
+// Wrong version
 func numSubarrayProductLessThanK(nums []int, k int) int {
 	if k <= 1 {
 		return 0
