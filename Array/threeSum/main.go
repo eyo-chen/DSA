@@ -4,7 +4,42 @@ import (
 	"sort"
 )
 
+// Brute Force
+// Time Complexity: O(n^3)
+// Space Complexity: O(1)
 func ThreeSum(nums []int) [][]int {
+	ans := [][]int{}
+
+	sort.Slice(nums, func(i, j int) bool {
+		return nums[i] < nums[j]
+	})
+
+	for i := 0; i < len(nums); i++ {
+		if i > 0 && nums[i] == nums[i-1] {
+			continue
+		}
+
+		for k := i + 1; k < len(nums); k++ {
+			if k > i+1 && nums[k] == nums[k-1] {
+				continue
+			}
+
+			for j := k + 1; j < len(nums); j++ {
+				if j > k+1 && nums[j] == nums[j-1] {
+					continue
+				}
+
+				if nums[i]+nums[k]+nums[j] == 0 {
+					ans = append(ans, []int{nums[i], nums[k], nums[j]})
+				}
+			}
+		}
+	}
+
+	return ans
+}
+
+func ThreeSum2(nums []int) [][]int {
 	// Sort the array in ascending order
 	sort.Slice(nums, func(i, j int) bool {
 		return nums[i] < nums[j]
