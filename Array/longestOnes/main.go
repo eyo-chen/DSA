@@ -35,10 +35,32 @@ func LongestOnes(nums []int, k int) int {
 	return ans
 }
 
+// More concise version of the brute force solution
+func LongestOnes2(nums []int, k int) int {
+	ans := 0
+
+	for i := 0; i < len(nums); i++ {
+		flip := 0
+		for j := i; j < len(nums); j++ {
+			if nums[j] == 0 {
+				if flip == k {
+					break
+				} else {
+					flip++
+				}
+			}
+
+			ans = max(ans, j-i+1)
+		}
+	}
+
+	return ans
+}
+
 // Sliding Window
 // Time Complexity O(n)
 // Space Complexity O(1)
-func LongestOnes2(nums []int, k int) int {
+func LongestOnes3(nums []int, k int) int {
 	ans, flip := 0, 0
 	left, right := 0, 0
 
@@ -70,7 +92,7 @@ func LongestOnes2(nums []int, k int) int {
 // Wrong Answer
 // This is my initial attempt at the problem
 // This is wrong and way too complicated
-func LongestOnes3(nums []int, k int) int {
+func LongestOnes4(nums []int, k int) int {
 	ans, flip := 0, 0
 	left, right := 0, 0
 
