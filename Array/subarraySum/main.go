@@ -21,8 +21,25 @@ func SubarraySum(nums []int, k int) int {
 	return ans
 }
 
-// Using hash table
+// This is more concise version of the brute force solution
 func SubarraySum2(nums []int, k int) int {
+	ans := 0
+
+	for i := 0; i < len(nums); i++ {
+		sum := 0
+		for j := i; j < len(nums); j++ {
+			sum += nums[j]
+			if sum == k {
+				ans++
+			}
+		}
+	}
+
+	return ans
+}
+
+// Using hash table
+func SubarraySum3(nums []int, k int) int {
 	hashTable := map[int]int{0: 1}
 	sum := 0
 	ans := 0
