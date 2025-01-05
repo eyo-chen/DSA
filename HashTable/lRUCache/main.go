@@ -99,3 +99,113 @@ func (l *LRUCache) popTail() *doubleLinkedList {
 	l.removeNode(tail)
 	return tail
 }
+
+// updated at 2025-01-05
+type doubleLinkedList1 struct {
+	val  int
+	key  int
+	prev *doubleLinkedList1
+	next *doubleLinkedList1
+}
+
+type LRUCache1 struct {
+	hashTable map[int]*doubleLinkedList1
+	cap       int
+	head      *doubleLinkedList1 // least used
+	tail      *doubleLinkedList1 // most used
+}
+
+func Constructor1(capacity int) LRUCache1 {
+	// Initialize the head and tail
+	head := &doubleLinkedList1{}
+	tail := &doubleLinkedList1{}
+
+	// Connect the head and tail
+	head.next = tail
+	tail.prev = head
+
+	return LRUCache1{
+		hashTable: make(map[int]*doubleLinkedList1, capacity),
+		cap:       capacity,
+		head:      head,
+		tail:      tail,
+	}
+}
+
+func (l *LRUCache1) Get(key int) int {
+	// Get the node from the hash table
+	// If the node is not found, return -1
+	node, exist := l.hashTable[key]
+	if !exist {
+		return -1
+	}
+
+	// Update the node to the tail
+	l.updateToTail(node)
+
+	// Return the value of the node
+	return node.val
+}
+
+func (l *LRUCache1) Put(key int, value int) {
+	// If the node is found, update the value and move it to the tail
+	if node, exist := l.hashTable[key]; exist {
+		// update the value
+		node.val = value
+
+		// update the node to the tail
+		l.updateToTail(node)
+		return
+	}
+
+	// If the hash table is full, remove the least used node
+	if len(l.hashTable) == l.cap {
+		// get the least used node (head is the least used node)
+		leastUsedNode := l.head.next
+
+		// remove the least used node
+		l.removeNode(leastUsedNode)
+
+		// delete the least used node from the hash table
+		delete(l.hashTable, leastUsedNode.key)
+	}
+
+	// add the new node to the hash table
+	node := &doubleLinkedList1{val: value, key: key}
+	l.hashTable[key] = node
+
+	// add the new node to the tail
+	l.addToTail(node)
+}
+
+func (l *LRUCache1) updateToTail(node *doubleLinkedList1) {
+	// remove the node from the list
+	l.removeNode(node)
+
+	// add the node to the tail
+	l.addToTail(node)
+}
+
+func (l *LRUCache1) addToTail(node *doubleLinkedList1) {
+	// connect the node to the tail
+	node.next = l.tail
+	node.prev = l.tail.prev
+
+	// connect the tail to the node
+	l.tail.prev.next = node
+	l.tail.prev = node
+}
+
+func (l *LRUCache1) removeNode(node *doubleLinkedList1) {
+	// get the next and previous node
+	next := node.next
+	prev := node.prev
+
+	// update the next and previous node
+	prev.next = next
+	next.prev = prev
+
+	// disconnect the node
+	node.next = nil
+	node.prev = nil
+}
