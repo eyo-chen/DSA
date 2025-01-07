@@ -71,6 +71,64 @@ func Merge2(nums1 []int, m int, nums2 []int, n int) {
 	}
 }
 
+// Use Two Pointers (Updated 2025/01/07)
+/*
+This is the same logic as Merge2, but it's more readable.
+We use ptr1 and ptr2 as our core condition
+After the first for-loop, we only need to handle the remaining elements in nums2.
+Why we don't need to handle the remaining elements in nums1?
+Because the elements in nums1 are already sorted, and we already put the elements in nums1 to the sorted array.
+Suppose the
+nums1 = [1,3,5,0,0,0], m = 3
+nums2 = [3,4,6], n = 3
+
+- First iteration, ptr1 = 2, ptr2 = 2, idx = 5
+  - compare 5 and 6, 6 is larger, so we put 6 to the sorted array.
+	- nums1 = [1,3,5,0,0,6]
+	- ptr2--, idx--
+- Second iteration, ptr1 = 2, ptr2 = 1, idx = 4
+  - compare 5 and 4, 5 is larger, so we put 5 to the sorted array.
+	- nums1 = [1,3,5,0,5,6]
+	- ptr1--, idx--
+- Third iteration, ptr1 = 1, ptr2 = 1, idx = 3
+  - compare 3 and 4, 4 is larger, so we put 4 to the sorted array.
+	- nums1 = [1,3,5,4,5,6]
+	- ptr2--, idx--
+- Fourth iteration, ptr1 = 1, ptr2 = 0, idx = 2
+  - compare 3 and 3, it's equal, so we put 3 of nums2 to the sorted array.
+	- nums1 = [1,3,3,4,5,6]
+	- ptr2--, idx--
+
+Now, ptr2 is less than 0, so we can break the loop.
+At this point, ptr1 is at 1, ptr2 is at -1, idx is at 0.
+We can see that even thought we do not finish iterating the nums1, it's still sorted.
+So, we don't need to handle the remaining elements in nums1.
+*/
+
+func Merge3(nums1 []int, m int, nums2 []int, n int) {
+	ptr1, ptr2 := m-1, n-1
+	idx := m + n - 1
+
+	// Keep looping until one of the pointers reach the beginning of the array
+	for ptr1 >= 0 && ptr2 >= 0 {
+		if nums1[ptr1] > nums2[ptr2] {
+			nums1[idx] = nums1[ptr1]
+			ptr1--
+		} else {
+			nums1[idx] = nums2[ptr2]
+			ptr2--
+		}
+		idx--
+	}
+
+	// If there are remaining elements in nums2, we can put them to the sorted array.
+	for ptr2 >= 0 {
+		nums1[idx] = nums2[ptr2]
+		ptr2--
+		idx--
+	}
+}
+
 // Note that this solution is try to fill up the sorted elements from the beginning of the array.
 // But it will lead to the problem
 /*
@@ -95,7 +153,7 @@ When running your current code:
 
 The final result will be incorrect because nums2 got modified and is no longer sorted.
 */
-func Merge3(nums1 []int, m int, nums2 []int, n int) {
+func Merge4(nums1 []int, m int, nums2 []int, n int) {
 	if len(nums2) == 0 {
 		return
 	}
@@ -130,7 +188,7 @@ func Merge3(nums1 []int, m int, nums2 []int, n int) {
 // nums2 = [8,4,6] -> [4,6,8]
 // Then we continue the same logic
 // The most important thing is that we need to make sure the nums2 is sorted after swapping.
-func Merge4(nums1 []int, m int, nums2 []int, n int) {
+func Merge5(nums1 []int, m int, nums2 []int, n int) {
 	if len(nums2) == 0 {
 		return
 	}
