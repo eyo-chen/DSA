@@ -21,3 +21,26 @@ func helper(n int, str []byte, ans *[]string, countOpen int, countClose int) {
 		helper(n, append(str, ')'), ans, countOpen, countClose+1)
 	}
 }
+
+// Updated at 2025/01/10
+func GenerateParenthesis2(n int) []string {
+	ans := []string{}
+	helper2(n, &ans, []byte{}, 0, 0)
+	return ans
+}
+
+func helper2(n int, ans *[]string, curString []byte, open, close int) {
+	if open == n && close == n {
+		*ans = append(*ans, string(curString))
+		return
+	}
+
+	if open > n || close > n {
+		return
+	}
+
+	helper2(n, ans, append(curString, '('), open+1, close)
+	if open > close {
+		helper2(n, ans, append(curString, ')'), open, close+1)
+	}
+}
