@@ -75,3 +75,49 @@ func bfs(grid [][]byte, startRow, startCol int) {
 		}
 	}
 }
+
+type location3 struct {
+	row int
+	col int
+}
+
+var (
+	directions3 = []location3{{row: 1, col: 0}, {row: -1, col: 0}, {row: 0, col: 1}, {row: 0, col: -1}}
+)
+
+func NumIslands3(grid [][]byte) int {
+	ans := 0
+	for r := 0; r < len(grid); r++ {
+		for c := 0; c < len(grid[0]); c++ {
+			if grid[r][c] == '1' {
+				bfs3(grid, r, c)
+				ans++
+			}
+		}
+	}
+
+	return ans
+}
+
+func bfs3(grid [][]byte, row, col int) {
+	queue := []location3{{row, col}}
+
+	for len(queue) > 0 {
+		node := queue[0]
+		queue = queue[1:]
+
+		if node.row < 0 || node.col < 0 || node.row >= len(grid) || node.col >= len(grid[0]) {
+			continue
+		}
+
+		if grid[node.row][node.col] != '1' {
+			continue
+		}
+
+		grid[node.row][node.col] = '2'
+		for _, d := range directions3 {
+			r, c := node.row+d.row, node.col+d.col
+			queue = append(queue, location3{row: r, col: c})
+		}
+	}
+}
