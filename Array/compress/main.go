@@ -46,7 +46,34 @@ func Compress(chars []byte) int {
 	return len(tmp)
 }
 
+// Updated at 2025-01-12
 func Compress2(chars []byte) int {
+	tmp := []byte{}
+	ptr := 0
+
+	for ptr < len(chars) {
+		char := chars[ptr]
+		tmp = append(tmp, char)
+		count := 0
+
+		for ptr < len(chars) && chars[ptr] == char {
+			ptr++
+			count++
+		}
+
+		if count > 1 {
+			strCount := strconv.Itoa(count)
+			for s := 0; s < len(strCount); s++ {
+				tmp = append(tmp, strCount[s])
+			}
+		}
+	}
+
+	copy(chars, tmp)
+	return len(tmp)
+}
+
+func Compress3(chars []byte) int {
 	// Initialize the pointer
 	ptr := 0
 
@@ -85,4 +112,41 @@ func Compress2(chars []byte) int {
 	}
 
 	return ptr
+}
+
+// Updated at 2025-01-12
+/*
+1. init write and read at the beginning(0)
+2. keep updating read until it's out of the bound
+   (1) init count(to count the number of consecutive characters)
+   (2) access current char(for comparison and update)
+   (3) keep updating read until it's out of the bound OR the value is different
+   (4) update chars[write] = char, write++
+   (5) update chars[write] = count(handle the case when count is greater than 10), write++
+*/
+func Compress4(chars []byte) int {
+	read, write := 0, 0
+
+	for read < len(chars) {
+		count := 0
+		char := chars[read]
+
+		for read < len(chars) && chars[read] == char {
+			count++
+			read++
+		}
+
+		chars[write] = char
+		write++
+
+		if count > 1 {
+			countStr := strconv.Itoa(count)
+			for s := 0; s < len(countStr); s++ {
+				chars[write] = countStr[s]
+				write++
+			}
+		}
+	}
+
+	return write
 }
