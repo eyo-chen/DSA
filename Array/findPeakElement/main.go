@@ -29,6 +29,28 @@ func FindPeakElement(nums []int) int {
 	return len(nums) - 1
 }
 
+// Brute Force
+// More straightforward solution
+func FindPeakElement2(nums []int) int {
+	if len(nums) == 1 {
+		return 0
+	}
+
+	for i := 0; i < len(nums); i++ {
+		if i == 0 && nums[i] > nums[i+1] {
+			return i
+		}
+		if i == len(nums)-1 && nums[i] > nums[i-1] {
+			return i
+		}
+		if nums[i] > nums[i+1] && nums[i] > nums[i-1] {
+			return i
+		}
+	}
+
+	return -1
+}
+
 func FindPeakElement3(nums []int) int {
 	left, right := 0, len(nums)-1
 
