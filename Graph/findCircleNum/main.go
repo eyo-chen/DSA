@@ -49,3 +49,79 @@ func bfs(isConnected [][]int, city int, visited []bool) {
 		}
 	}
 }
+
+func FindCircleNum2(isConnected [][]int) int {
+	ans := 0
+	visited := make([]bool, len(isConnected))
+
+	for i := 0; i < len(isConnected); i++ {
+		if visited[i] {
+			continue
+		}
+
+		DFS(isConnected, visited, i)
+		ans++
+	}
+
+	return ans
+}
+
+func DFS(isConnected [][]int, visited []bool, node int) {
+	if visited[node] {
+		return
+	}
+
+	visited[node] = true
+	for i := 0; i < len(isConnected[node]); i++ {
+		if node == i || isConnected[node][i] == 0 {
+			continue
+		}
+
+		DFS(isConnected, visited, i)
+	}
+}
+
+func DFSStack(isConnected [][]int, visited []bool, node int) {
+	stack := []int{node}
+
+	for len(stack) > 0 {
+		curNode := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+
+		if visited[curNode] {
+			continue
+		}
+
+		visited[curNode] = true
+		for i := 0; i < len(isConnected[curNode]); i++ {
+			if i == curNode || isConnected[curNode][i] == 0 {
+				continue
+			}
+
+			stack = append(stack, i)
+		}
+	}
+}
+
+func BFS(isConnected [][]int, visited []bool, node int) {
+	queue := []int{node}
+
+	for len(queue) > 0 {
+		curNode := queue[0]
+		queue = queue[1:]
+
+		if visited[curNode] {
+			continue
+		}
+
+		visited[curNode] = true
+
+		for i := 0; i < len(isConnected[curNode]); i++ {
+			if curNode == i || isConnected[curNode][i] == 0 {
+				continue
+			}
+
+			queue = append(queue, i)
+		}
+	}
+}
