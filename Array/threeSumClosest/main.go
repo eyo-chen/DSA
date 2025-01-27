@@ -5,9 +5,35 @@ import (
 	"sort"
 )
 
-// Time Complexity O(n^2)
+// Time Complexity O(n^3)
 // Space Complexity O(1)
 func ThreeSumClosest(nums []int, target int) int {
+	ans := math.MaxInt
+	closest := math.MaxInt
+
+	for i := 0; i < len(nums); i++ {
+		for j := i + 1; j < len(nums); j++ {
+			for k := j + 1; k < len(nums); k++ {
+				// calculate the sum of the triplet
+				sum := nums[i] + nums[j] + nums[k]
+				// calculate the difference between the sum and the target
+				diff := int(math.Abs(float64(sum - target)))
+				// if the difference is smaller than the smallest difference we have found so far
+				// update the smallest difference and the closest sum
+				if diff < closest {
+					closest = diff
+					ans = sum
+				}
+			}
+		}
+	}
+
+	return ans
+}
+
+// Time Complexity O(n^2)
+// Space Complexity O(1)
+func ThreeSumClosest1(nums []int, target int) int {
 	// sum is the closest sum to target, which is the answer
 	sum := 0
 	// closest is the smallest difference between sum and target
