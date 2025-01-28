@@ -157,3 +157,90 @@ func CheckInclusion2(s1 string, s2 string) bool {
 
 	return false
 }
+
+// Updated at 0128 2025
+// Brute Force
+func CheckInclusion3(s1 string, s2 string) bool {
+	hashTable1 := make([]int, 26)
+	for i := 0; i < len(s1); i++ {
+		hashTable1[s1[i]-'a']++
+	}
+
+	// Only need to loop through len(s2) - len(s1) times
+	for i := 0; i <= len(s2)-len(s1); i++ {
+		hashTable2 := make([]int, 26)
+
+		for k := 0; k < len(s1); k++ {
+			hashTable2[s2[i+k]-'a']++
+		}
+
+		match := true
+		for k := 0; k < 26; k++ {
+			if hashTable1[k] != hashTable2[k] {
+				match = false
+				break
+			}
+		}
+
+		if match {
+			return true
+		}
+	}
+
+	return false
+}
+
+// Updated at 0128 2025
+// Sliding Window
+func CheckInclusion4(s1 string, s2 string) bool {
+	if len(s2) < len(s1) {
+		return false
+	}
+
+	left, right := 0, 0
+	hashTable1 := make([]int, 26)
+	hashTable2 := make([]int, 26)
+
+	// Init the hash table for s1
+	// Also, init the hash table for s2 and the window size
+	for i := 0; i < len(s1); i++ {
+		hashTable1[s1[i]-'a']++
+		hashTable2[s2[i]-'a']++
+		right++
+	}
+
+	// Check if the first window is a permutation of s1
+	if match(hashTable1, hashTable2) {
+		return true
+	}
+
+	// Loop through s2
+	for right < len(s2) {
+		// Add the character of right pointer to hashTable2
+		hashTable2[s2[right]-'a']++
+
+		// Remove the character of left pointer from hashTable2
+		hashTable2[s2[left]-'a']--
+
+		// Move the left pointer to right
+		left++
+		right++
+
+		// Check if the current window is a permutation of s1
+		if match(hashTable1, hashTable2) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func match(s1, s2 []int) bool {
+	for i := 0; i < 26; i++ {
+		if s1[i] != s2[i] {
+			return false
+		}
+	}
+
+	return true
+}
