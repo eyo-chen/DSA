@@ -76,3 +76,31 @@ func RemoveDuplicates3(nums []int) int {
 
 	return k
 }
+
+// Update at 2025-02-08
+func RemoveDuplicates4(nums []int) int {
+	// writeIdx is the index where we'll write the next number
+	writeIdx := 1
+
+	// freq is the number of duplicates of the current number
+	freq := 1
+
+	// Start from the second element
+	for i := 1; i < len(nums); i++ {
+		// If the current number is equal to the previous number, we increment the frequency
+		if nums[i] == nums[i-1] {
+			freq++
+		} else {
+			// Otherwise, we reset the frequency
+			freq = 1
+		}
+
+		// If the frequency is less than or equal to 2, we write the number to the array
+		if freq <= 2 {
+			nums[writeIdx] = nums[i]
+			writeIdx++
+		}
+	}
+
+	return writeIdx
+}
