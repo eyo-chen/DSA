@@ -55,3 +55,31 @@ func maxVal(s []int) int {
 
 	return ans
 }
+
+// Maintain maximum frequency in the while-loop process
+func CharacterReplacement1(s string, k int) int {
+	freq := map[byte]int{}
+	maxFreq := 0
+	ans := 0
+	left, right := 0, 0
+
+	for right < len(s) {
+		freq[s[right]]++
+
+		// update the maximum frequency
+		maxFreq = max(maxFreq, freq[s[right]])
+
+		// shrink the window size if it's not valid
+		// Note that we use current length to validate(right - left + 1)
+		for right-left+1-maxFreq > k && left < right {
+			freq[s[left]]--
+			left++
+		}
+
+		// update the answer
+		ans = max(ans, right-left+1)
+		right++
+	}
+
+	return ans
+}
