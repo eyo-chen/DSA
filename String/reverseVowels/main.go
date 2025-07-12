@@ -20,3 +20,24 @@ func ReverseVowels(s string) string {
 
 	return string(bs)
 }
+
+func ReverseVowels1(s string) string {
+	ans := []byte(s)
+	vowels := map[byte]bool{'a': true, 'A': true, 'e': true, 'E': true, 'i': true, 'I': true, 'o': true, 'O': true, 'u': true, 'U': true}
+	left, right := 0, len(s)-1
+
+	for left < right {
+		for left < right && !vowels[s[left]] {
+			left++
+		}
+		for left < right && !vowels[s[right]] {
+			right--
+		}
+
+		ans[left], ans[right] = ans[right], ans[left]
+		left++
+		right--
+	}
+
+	return string(ans)
+}
