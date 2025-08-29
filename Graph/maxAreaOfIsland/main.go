@@ -11,8 +11,8 @@ func MaxAreaOfIsland(grid [][]int) int {
 	seen := map[string]bool{}
 	maxCount := 0
 
-	for r := 0; r < len(grid); r++ {
-		for c := 0; c < len(grid[r]); c++ {
+	for r := range grid {
+		for c := range grid[0] {
 			if grid[r][c] == 0 {
 				continue
 			}
@@ -56,8 +56,8 @@ func MaxAreaOfIsland1(grid [][]int) int {
 	seen := map[string]bool{}
 	maxCount := 0
 
-	for r := 0; r < len(grid); r++ {
-		for c := 0; c < len(grid[r]); c++ {
+	for r := range grid {
+		for c := range grid[0] {
 			if grid[r][c] == 0 {
 				continue
 			}
