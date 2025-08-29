@@ -101,4 +101,93 @@ After the BFS, we have:<br>
 - The space complexity is the space used by the queue
 - The worst case is that all the oranges are rotten, so the space complexity is O(n * m)
 
+# One Small Gotcha
+I implemented a solution on 2025/08/23 that was very similar to the correct solution. <br>
+However, I didn't include the condition `freshCount > 0` in the outer for-loop, which resulted in an incorrect approach. <br>
+Why does this happen? Let's use an example to find out.<br>
 
+**Initial Grid:**
+```
+[2, 1, 1]
+[1, 1, 0]
+[0, 1, 1]
+```
+
+**Setup:**
+- `queue = [[0,0]]` (position of the initial rotten orange)
+- `freshCount = 6` (counting all the `1`s)
+
+## First Solution (INCORRECT) - Trace:
+
+### Minute 0 → 1:
+- **Before:** `queue = [[0,0]]`, `freshCount = 6`
+- Process rotten orange at `[0,0]`
+- Rot adjacent fresh oranges: `[0,1]` and `[1,0]`
+- **After processing:** `queue = [[0,1], [1,0]]`, `freshCount = 4`
+- **Grid becomes:**
+```
+[2, 2, 1]
+[2, 1, 0]
+[0, 1, 1]
+```
+- `minute++` → `minute = 1`
+
+### Minute 1 → 2:
+- **Before:** `queue = [[0,1], [1,0]]`, `freshCount = 4`
+- Process `[0,1]`: rots `[0,2]`
+- Process `[1,0]`: rots `[1,1]`
+- **After processing:** `queue = [[0,2], [1,1]]`, `freshCount = 2`
+- **Grid becomes:**
+```
+[2, 2, 2]
+[2, 2, 0]
+[0, 1, 1]
+```
+- `minute++` → `minute = 2`
+
+### Minute 2 → 3:
+- **Before:** `queue = [[0,2], [1,1]]`, `freshCount = 2`
+- Process `[0,2]`: no adjacent fresh oranges
+- Process `[1,1]`: rots `[2,1]`
+- **After processing:** `queue = [[2,1]]`, `freshCount = 1`
+- **Grid becomes:**
+```
+[2, 2, 2]
+[2, 2, 0]
+[0, 2, 1]
+```
+- `minute++` → `minute = 3`
+
+### Minute 3 → 4:
+- **Before:** `queue = [[2,1]]`, `freshCount = 1`
+- Process `[2,1]`: rots `[2,2]`
+- **After processing:** `queue = [[2,2]]`, `freshCount = 0`
+- **Grid becomes:**
+```
+[2, 2, 2]
+[2, 2, 0]
+[0, 2, 2]
+```
+- `minute++` → `minute = 4`
+
+### Minute 4 → 5:
+- **Before:** `queue = [[2,2]]`, `freshCount = 0` ⚠️
+- **The problem:** Even though `freshCount = 0` (no fresh oranges left), we still enter the loop because `len(queue) > 0`
+- Process `[2,2]`: no adjacent fresh oranges to rot
+- **After processing:** `queue = []`, `freshCount = 0`
+- `minute++` → `minute = 5` ❌
+
+**First solution returns: 5** (WRONG!)
+
+## Second Solution (CORRECT) - Key Difference:
+
+The trace is identical until Minute 4, but then:
+
+### Minute 4:
+- **Before:** `queue = [[2,2]]`, `freshCount = 0`
+- **Loop condition check:** `len(queue) > 0 && freshCount > 0`
+- This is `true && false = false`
+- **We don't enter the loop!**
+- `minute` stays at 4
+
+**Second solution returns: 4** (CORRECT!)
