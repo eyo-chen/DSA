@@ -55,12 +55,96 @@ Thought the checking logic is different, the core logic is the same<br/>
 It's abvious we won't have perfect tree like this, which means the branching factor won't always be 4, because we have the constraint, can't be same row and col, also diagonal cases <br/>
 It's just a visualization to help us understand the problem
 
+## How To Do the Validation
+The following explanation is based on the first solution of Go<br>
+***One thing to note that we place the queen from top to bottom***<br>
+***That means when doing validation, we only need to check the previous rows***<br/>
+```
+.   .   .    Q
+Q   .   .    .
+.   .   .    .
+.   .   .    .
+```
+When we're at the third row, we don't need check any element in the fourth row.<br>
 
-# Complexity Analysis
+***One thing to note that we don't need to check the same row***<br>
+That's because our recursive function is designed to place one queen per row<br>
+
+### Check Column
+When checking column, we only need to check the previous rows<br>
+```
+.   .   ?    Q
+Q   .   ?    .
+.   .   *    .
+.   .   .    .
+```
+Look at the position with *<br>
+We only need to check the previous rows(position with `?`)<br>
+```go
+	for r := range row {
+		if hashTable[r][col] {
+			return false
+		}
+	}
+```
+We only check the row from 0 to row - 1<br>
+
+### Check Diagonal
+Similar to checking column, we only need to check the previous rows<br>
+When checking diagonal, there are two diagonals to check<br>
+- Positive diagonal(top-left): (r - rowDiff, col - rowDiff)
+- Negative diagonal(top-right): (r - rowDiff, col + rowDiff)
+
+Positive Diagonal(top-left)
+```
+?   .   .    Q
+Q   ?   .    .
+.   .   *    .
+.   .   .    .
+```
+Look at the position with *, when checking positive diagonal, we need to check the position with `?`<br>
+How to find all the positions with `?`<br>
+The position with * is (2, 2)<br>
+- When rowDiff = 1, (2 - 1, 2 - 1) = (1, 1)
+- When rowDiff = 2, (2 - 2, 2 - 2) = (0, 0)
+
+So we know that we just need to decrease both row and col one by one, we can check all the positions with `?`<br>
+```go
+	for r, c := row-1, col-1; r >= 0 && c >= 0; r, c = r-1, c-1 {
+		if hashTable[r][c] {
+			return false
+		}
+	}
+```
+
+Negative Diagonal(top-right)
+```
+.   .   .    ?
+Q   .   ?    .
+.   *   .    .
+.   .   .    .
+```
+Look at the position with *, when checking negative diagonal, we need to check the position with `?`<br>
+How to find all the positions with `?`<br>
+The position with * is (2, 1)<br>
+- When rowDiff = 1, (2 - 1, 1 + 1) = (1, 2)
+- When rowDiff = 2, (2 - 2, 1 + 2) = (0, 3)
+
+So we know that we need to decrease row by one and increase col by one, we can check all the positions with `?`<br>
+```go
+	for r, c := row-1, col+1; r >= 0 && c < n; r, c = r-1, c+1 {
+		if hashTable[r][c] {
+			return false
+		}
+	}
+```
+
+
+## Complexity Analysis
 
 n = the legnth of input string
 
-## Time Complexity: O((n^n) * n)
+### Time Complexity: O((n^n) * n)
 - Branching Factor = n
   - At worst, we can choose n times
 - Depth = n
@@ -74,9 +158,9 @@ Another time complexity analysis is O(n! * n)<br/>
 First row, we have n choices<br/>
 Second row, we can have at least n - 2 choices
 
-## Space Complexity: O(n)
+### Space Complexity: O(n)
 
-## Detail Explanation
+### Detail Explanation
 To understand the time complexity of this solution, let's examine the recursive function helper which is essentially a backtracking algorithm to solve the N Queens problem.
 
 For the N Queens problem, a brute force approach would generate all possible combinations of queens on the board, which would be O(n^n) since for every row there are n possibilities, and there are n rows to consider. However, the backtracking approach tries to place a queen in a valid position row by row and skips entire sub-trees of invalid board states, which means it does not explore all n^n possibilities.
