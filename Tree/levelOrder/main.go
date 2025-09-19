@@ -19,7 +19,7 @@ func LevelOrder(root *TreeNode) [][]int {
 		l := len(queue)
 		curLevel := make([]int, l)
 
-		for i := 0; i < l; i++ {
+		for i := range l {
 			node := queue[0]
 			queue = queue[1:]
 
@@ -53,10 +53,12 @@ func dfs(node *TreeNode, ans *[][]int, level int) {
 		return
 	}
 
+	// When we reach a new level, we need to add a new slice to ans
 	if len(*ans) == level {
 		*ans = append(*ans, []int{})
 	}
 
+	// Append the current node's value to the corresponding level slice
 	(*ans)[level] = append((*ans)[level], node.Val)
 
 	dfs(node.Left, ans, level+1)
