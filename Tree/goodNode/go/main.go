@@ -35,3 +35,46 @@ func helper(node *TreeNode, maxVal int) int {
 
 	return leftCount + rightCount + isGoodNode
 }
+
+// nodeInfo is used to store the node and the target value
+type nodeInfo struct {
+	node   *TreeNode
+	target int
+}
+
+// BFS Approach
+func GoodNodes1(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+
+	queue := []*nodeInfo{{node: root, target: root.Val}}
+	ans := 0
+
+	for len(queue) > 0 {
+		info := queue[0]
+		queue = queue[1:]
+
+		node, target := info.node, info.target
+
+		// check if the current node is a good node
+		// if the current node's value is greater than or equal to target,
+		// it means it is a good node
+		if node.Val >= target {
+			ans++
+		}
+
+		// update the target value for the child nodes
+		// the new target value is the maximum value between the current node's value and the target value
+		newTarget := max(node.Val, target)
+
+		if node.Left != nil {
+			queue = append(queue, &nodeInfo{node: node.Left, target: newTarget})
+		}
+		if node.Right != nil {
+			queue = append(queue, &nodeInfo{node: node.Right, target: newTarget})
+		}
+	}
+
+	return ans
+}
