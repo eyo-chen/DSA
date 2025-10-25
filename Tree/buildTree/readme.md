@@ -90,6 +90,92 @@ The key point is that<br>
 As long as we follow the pattern of left first,<br>
 We know that the order of root node of each subtree is the same as preorder traversal<br>
 
+## Updated At 2025/09/13
+It's pretty easy to understand that `preorder` tells us the order of the root, and `inorder` tells us how to split right subtree and left subtree.<br>
+However, the actual implementation is actually a little bit tricky<br>
+The tricky part is how to correctly find the root using index<br>
+
+Let's see this example<br>
+```
+             3
+        /         \ 
+       9          20
+     /   \       /   \
+   10     5     15    7
+```
+preorder=[3,9,10,5,20,15,7], inorder=[10,9,5,3,15,20,7]<br>
+It's obvious that the 3 is the first root node<br>
+Then, we attempt to construct the left subtree. It's obvious that we just increment the index of preorder to find the next root<br>
+The tricky part is for the right subtree.<br>
+Suppose we're at the first callstack where we've constructed the left subtree<br>
+```
+index_of_preorder = 0
+root = 3 = preorder[0]
+left = 9 = preorder[0+1] (suppose the entire left subtree is constructed)
+right=?
+```
+How do we update the index to find the correct root node of right subtree.<br>
+The intuition is that we want to ***skip the number of node in the left subtree***<br>
+Let's see the diagram again
+```
+             3
+        /         \ 
+       9           ?
+     /   \       
+   10     5
+
+         idx <- current index position
+preorder=[3,9,10,5,20,15,7]
+```
+We know there are 3 nodes in the left subtree, that means we need to update the index to `idx+3+1` to find the root node of right subtree.<br>
+The `+1` logic is to skip the root node itself<br>
+
+Now, the question becomes how to know the number of node in the left subtree?<br>
+We can utilize inorder array<br>
+inorder=[10,9,5,3,15,20,7]<br>
+After we finding the root node 3, we can conceptually split the inorder into two halves<br>
+- left subtree = [10,9,5]
+- right subtree = [15,20,7]
+And the index of root node in inorder array is 3.<br>
+That means there are three nodes in the left subtree<br>
+
+Dependes on how we split the inorder array, there are different approaches to find the number of node in the left subtree<br>
+1. Actually slices the array(the first Go solution)
+In this case, we just update the index `idx+1+index_of_root_node`.
+
+2. We only use left, right pointer to split the inorder array(Do not actually slice the array) (The second Go solution)
+In this case, we need to update the index `idx+1+index_of_root_node-left`<br>
+Why it's differenct?<br>
+Note that our goal is to skip the number of node in the left subtree + root node itself.<br>
+Because we do not slice the array, so `index_of_root_node` won't really represent the number of node in left subtree.<br>
+```
+             3
+        /         \ 
+       9          20
+     /   \       /   \
+   10     5     15    7
+```
+- When we want to find the correct index for 20: `idx = idx+3+1-0`
+  - idx=0 (starting point)
+  - preorder=[3,9,10,5,20,15,7]
+  - root_node=preorder[idx]=3
+  - inorder=[10,9,5,3,15,20,7]
+  - left=0, right=7
+  - index_of_root_node=3
+  - number of node in left subtree=3
+- When we want to find the correct index for 7: `idx+5+1-4`
+  - idx=4
+  - preorder=[3,9,10,5,20,15,7]
+  - root_node=preorder[idx]=20
+  - inorder=[10,9,5,3,15,20,7]
+  - left=4, right=7
+  - index_of_root_node=5
+  - number of node in left subtree=1
+Note that there's only one node in the left subtree for the tree=[15,20,7]<br>
+The `index_of_root_node` is 5, but this 5 is the absolute index in the original inorder array, which is not right<br>
+We need to subtract the left value to simulate that we're slicing the array.
+
+
 ## Complexity Analysis
 ### Time Complexity: O(n)
 - At worst, we have to visit all the nodes in the tree
