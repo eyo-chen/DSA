@@ -19,7 +19,7 @@ func Connect(root *Node) *Node {
 		size := len(queue)
 		var prevNode *Node
 
-		for i := 0; i < size; i++ {
+		for range size {
 			node := queue[0]
 			queue = queue[1:]
 
