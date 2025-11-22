@@ -124,7 +124,7 @@ In other words, we move the next node of `cur` to in front of the sublist<br>
 ***In other words, we move the next node of `cur` to the next node of `nbr`***<br>
 
 <pre>
-nbr  cur
+nbr  cur  next
  1 -> 2 -> 3 -> 4 -> 5 -> x
 </pre>
 next = cur.next -> 3 <br>
@@ -133,7 +133,7 @@ we want to sth like this 1 -> 3<br>
 
 1. 
 <pre>
-nbr       cur
+nbr       cur  next
  1 -> 3 -> 2 -> 4 -> 5 -> x
 </pre>
 move 3 to the next node of `nbr`<br>
@@ -141,7 +141,7 @@ Now the new next node is 4 because cur.next = 4 <br>
 
 2.
 <pre> 
-nbr            cur
+nbr            cur  next
  1 -> 4 -> 3 -> 2 -> 5 -> x
 </pre>
 move 4 to the next node of `nbr`<br>
@@ -155,3 +155,16 @@ Just like previous solution<br>
 ### Complexity Analysis
 #### Time Complexity: O(n)
 #### Space Complexity: O(1)
+
+## Third Solution (2025/10/10)
+The idea is very similar to the first solution, but it's more easy to understand<br>
+It's obvious that all we need to do is to reference two nodes<br>
+1. The node before the left node
+2. The node after the right node
+
+After we have that reference, we can reverse the linked list between left and right<br>
+Before starting the reversal, we know that we can set `prev` node to the node after the right node(Look at the diagram to understand why)<br>
+Then we can reverse the linked list in the standard way<br>
+In the end, we just need to connect the node before the left node to the new head of the reversed linked list, which is `prev`<br>
+
+It's very straightforward from the diagram and the code<br>
