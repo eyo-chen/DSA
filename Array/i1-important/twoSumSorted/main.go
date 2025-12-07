@@ -46,3 +46,33 @@ func TwoSum1(numbers []int, target int) []int {
 
 	return []int{}
 }
+
+// TwoSum2 returns the 1-indexed positions of two numbers in the array
+// that add up to the target value using a hash map for O(1) lookups.
+//
+// Approach: Single-pass hash map - store each number with its index as we iterate,
+// checking if the complement (target - current number) already exists in the map.
+//
+// Time Complexity: O(n) - single pass through the array
+// Space Complexity: O(n) - hash map stores at most n elements
+func TwoSum2(numbers []int, target int) []int {
+	// Map to store number -> original index mapping for quick complement lookups
+	numToIndex := map[int]int{}
+
+	for currentIndex, currentNum := range numbers {
+		// Calculate the complement needed to reach target
+		complement := target - currentNum
+
+		// Check if complement exists in our map (found a pair)
+		if complementIndex, exists := numToIndex[complement]; exists {
+			// Return 1-indexed positions (problem requirement)
+			return []int{complementIndex + 1, currentIndex + 1}
+		}
+
+		// Store current number and its index for future complement checks
+		numToIndex[currentNum] = currentIndex
+	}
+
+	// No valid pair found (should not happen per problem constraints)
+	return []int{}
+}
