@@ -27,7 +27,7 @@ func TopKFrequent(nums []int, k int) []int {
 
 	// Create a slice to store the result
 	res := make([]int, 0, k)
-	for i := 0; i < k; i++ { // Only need to iterate k times
+	for i := range k { // Only need to iterate k times
 		res = append(res, freqPairs[i][0])
 	}
 
