@@ -21,6 +21,18 @@ func CanAttendMeetings(intervals [][]int) bool {
 	return true
 }
 
+/*
+return false if (second value of first interval > first value of second interval)
+*/
+
+/*
+0       30
+   5 10
+
+   2   4
+          7    10
+*/
+
 // This is my initial solution
 // However, it's not working as expected
 // The logic of this solution is to find the minimum and maximum value of the intervals
