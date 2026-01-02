@@ -118,7 +118,7 @@ func LongestMountain3(arr []int) int {
 func LongestMountain4(arr []int) int {
 	ans := 0
 
-	for i := 0; i < len(arr); i++ {
+	for i := range arr {
 		end := i
 		hasDecrease := false
 		hasIncrease := false
@@ -146,4 +146,52 @@ func LongestMountain4(arr []int) int {
 	}
 
 	return ans
+}
+
+// LongestMountain5 finds the length of the longest mountain subarray.
+// A mountain is defined as a subarray with length >= 3 where:
+// - Elements strictly increase to a peak
+// - Elements strictly decrease after the peak
+//
+// Approach: Iterate through potential peaks and expand left/right to find mountain boundaries.
+// For each peak, we expand in both directions while the mountain property holds.
+// After processing a mountain, we skip to its end since no valid peak can exist within it.
+//
+// Time Complexity: O(n) - Each element is visited at most twice (once by main loop, once during expansion)
+// Space Complexity: O(1) - Only constant extra space is used
+func LongestMountain5(arr []int) int {
+	maxLength := 0
+	peakIndex := 1
+
+	for peakIndex < len(arr)-1 {
+		// Check if current position is a valid peak (greater than both neighbors)
+		isPeak := arr[peakIndex] > arr[peakIndex-1] && arr[peakIndex] > arr[peakIndex+1]
+
+		if isPeak {
+			// Expand leftward to find the start of the ascending slope
+			leftBoundary := peakIndex - 1
+			for leftBoundary > 0 && arr[leftBoundary] > arr[leftBoundary-1] {
+				leftBoundary--
+			}
+
+			// Expand rightward to find the end of the descending slope
+			rightBoundary := peakIndex + 1
+			for rightBoundary < len(arr)-1 && arr[rightBoundary] > arr[rightBoundary+1] {
+				rightBoundary++
+			}
+
+			// Calculate mountain length and update maximum
+			mountainLength := rightBoundary - leftBoundary + 1
+			maxLength = max(maxLength, mountainLength)
+
+			// Skip to the position after current mountain's end
+			// This is safe because no new peak can exist within the current mountain
+			peakIndex = rightBoundary + 1
+		} else {
+			// Not a peak, move to next position
+			peakIndex++
+		}
+	}
+
+	return maxLength
 }
