@@ -244,3 +244,77 @@ func match(s1, s2 []int) bool {
 
 	return true
 }
+
+// CheckInclusion5 checks if s2 contains a permutation of s1.
+//
+// Approach: Uses a sliding window technique with frequency counting.
+// We maintain a frequency map for s1 and slide a window of size len(s1)
+// across s2, comparing character frequencies at each position.
+//
+// Time Complexity: O(n + m) where n = len(s1), m = len(s2)
+// - O(n) to build frequency map for s1
+// - O(m) to slide window across s2
+// - O(26) for each frequency comparison (constant)
+//
+// Space Complexity: O(1) - uses two fixed-size arrays of 26 elements
+func CheckInclusion5(s1 string, s2 string) bool {
+	// Early exit: s1 can't be a permutation substring if it's longer than s2
+	if len(s1) > len(s2) {
+		return false
+	}
+
+	// Build frequency map for s1 (the pattern we're searching for)
+	s1Freq := make([]int, 26)
+	for _, char := range s1 {
+		s1Freq[char-'a']++
+	}
+
+	// Build frequency map for the first window in s2
+	windowFreq := make([]int, 26)
+	for i := range len(s1) {
+		windowFreq[s2[i]-'a']++
+	}
+
+	// Check if the first window matches
+	if hasMatchingFrequencies(s1Freq, windowFreq) {
+		return true
+	}
+
+	// Slide the window across s2, one character at a time
+	// !!! Note that this loop is very important !!!
+	/*
+		We start the index from len(s1) because we have processed the first window (0~len(s1)-1) already.
+		For example, if s1 = "ab" and s2 = "eidbaooo", the above for loop processes the first two characters "ei".
+		The length of s1 is 2, so the next character to process is at index 2 (the third character in s2).
+		Then, we add the character at index 2 ('d') to the window and remove the character at index 0 ('e').
+		This way, we maintain a sliding window of size len(s1) as we move through s2.
+	*/
+	for i := len(s1); i < len(s2); i++ {
+		// Add the new character entering the window
+		newChar := s2[i] - 'a'
+		windowFreq[newChar]++
+
+		// Remove the old character leaving the window
+		oldChar := s2[i-len(s1)] - 'a'
+		windowFreq[oldChar]--
+
+		// Check if current window matches s1's frequency
+		if hasMatchingFrequencies(s1Freq, windowFreq) {
+			return true
+		}
+	}
+
+	// No matching permutation found
+	return false
+}
+
+// hasMatchingFrequencies compares two frequency arrays for equality.
+// Returns true if both arrays have identical values at each index.
+func hasMatchingFrequencies(freq1 []int, freq2 []int) bool {
+	for i, count := range freq1 {
+		if freq2[i] != count {
+			return false
+		}
+	}
+	return true
+}
