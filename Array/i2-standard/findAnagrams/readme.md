@@ -17,7 +17,7 @@ If they are the same, we add the start index of the current window to the result
 - We use two hash tables, and the space is only 26 * 2 = 52, which is constant.
 
 
-## Use Sliding Window And Generate Key
+## Use Sliding Window
 The idea is very similar to the above solution, but we do not generate a key for the current window.<br>
 Instead, we directly compare the hash table of the current window with the hash table of the pattern string.<br>
 If they are the same, we add the start index of the current window to the result.<br>
@@ -34,7 +34,7 @@ Also, note that the way we maintain the window is a little bit different from th
 - We use two hash tables, and the space is only 26 * 2 = 52, which is constant.
 
 
-## Use Match Count
+## Use Match Count(Tricky Solution)
 The idea is to use a match count to check if the current window is an anagram of the pattern string.<br>
 The purpose of using a match count is to how many characters in the current window are correctly matched.<br>
 When the match count is equal to the length of the pattern string, we add the start index of the current window to the result.<br>
