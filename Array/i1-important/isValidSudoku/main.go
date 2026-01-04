@@ -14,8 +14,8 @@ import "fmt"
 // Look at the diagram below to see how we decide the block
 func IsValidSudoku(board [][]byte) bool {
 	hashTable := map[string]bool{}
-	for r := 0; r < len(board); r++ {
-		for c := 0; c < len(board[r]); c++ {
+	for r := range board {
+		for c := range board[r] {
 			val := board[r][c]
 			// Skip the empty cell
 			if val == '.' {
