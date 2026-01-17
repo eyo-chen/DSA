@@ -8,7 +8,7 @@ func RemoveDuplicates(nums []int) int {
 	writeIdx := 0
 
 	// Iterate through the array
-	for i := 0; i < len(nums); i++ {
+	for i := range len(nums) {
 		// If the number of duplicates is greater than 2, we skip it
 		if hashTable[nums[i]] >= 2 {
 			continue
@@ -103,4 +103,22 @@ func RemoveDuplicates4(nums []int) int {
 	}
 
 	return writeIdx
+}
+
+// Updated at 2026-01-17
+// This is the cleanest code
+func RemoveDuplicates5(nums []int) int {
+	insertIdx, movingIdx := 0, 0
+
+	for movingIdx < len(nums) {
+		nums[insertIdx] = nums[movingIdx]
+
+		for movingIdx < len(nums) && nums[movingIdx] == nums[insertIdx] {
+			movingIdx++
+		}
+
+		insertIdx++
+	}
+
+	return insertIdx
 }
