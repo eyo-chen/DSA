@@ -84,28 +84,20 @@ func SetZeroes3(matrix [][]int) {
 	// isZeroAtFirstCol represents whether the first col need to be set to zero
 	isZeroAtFirstCol := false
 
-	// Check if the first col need to be set to zero
-	for r := range matrix {
-		if matrix[r][0] == 0 {
-			isZeroAtFirstCol = true
-			break
-		}
-	}
-
-	// Check if the first row need to be set to zero
-	for c := range matrix[0] {
-		if matrix[0][c] == 0 {
-			isZeroAtFirstRow = true
-			break
-		}
-	}
-
-	// Check each cell in the matrix
-	// If matrix[r][c] is 0, set matrix[r][0] and matrix[0][c] to 0
-	// This is to indicate that the r-th row and c-th column need to be set to zero
+	// Loop through the entire matrix
 	for r := range matrix {
 		for c := range matrix[r] {
 			if matrix[r][c] == 0 {
+				// If first row is zero
+				if r == 0 {
+					isZeroAtFirstRow = true
+				}
+
+				// If first col is zero
+				if c == 0 {
+					isZeroAtFirstCol = true
+				}
+
 				matrix[r][0] = 0
 				matrix[0][c] = 0
 			}
